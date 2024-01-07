@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { ReactDOM } from "react";
-import AdminDashboard from "./AdminDashboard";
+//import AdminDashboard from "./AdminDashboard";
 import { useNavigate } from "react-router-dom";
+import { AuthData } from "../../auth";
 
 function AdminLogin() {
   const [logindata, setLoginData] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
+  const { login } = AuthData();
 
   useEffect(() => {
     fetch("http://localhost:3000/admin/details")
@@ -18,22 +22,27 @@ function AdminLogin() {
       .catch((err) => console.log(err));
   }, []);
 
-  const [inputs, setInputs] = useState({});
-
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(inputs.empID);
-    if (inputs.empID == "nachiket") {
-      setFormSubmitted(true);
+    // if (inputs.empID == "nachiket") {
+    //   setFormSubmitted(true);
+    //   navigate("/admin/dashboard");
+    // }
+    try {
+      await login(inputs.empID, inputs.password);
       navigate("/admin/dashboard");
+    } catch (error) {
+      setErrorMessage(error);
     }
   };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -60,6 +69,7 @@ function AdminLogin() {
       </form>
 
       {/* {formSubmitted && <AdminDashboard />} */}
+      {errorMessage ? <div className="error">{errorMessage}</div> : null}
     </>
   );
 }
