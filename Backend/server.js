@@ -15,13 +15,21 @@ const db = mysql.createConnection({
 })
 
 app.get('/admin/details', (req, res) => {
-  const sql = 'SELECT * FROM logindetials';
+  const sql = 'SELECT * FROM details';
   db.query(sql, (err, data) => {
     if (err) return res.json(err);
     return res.json(data)
   })
 })
 
+
+app.get('/admin/logindetails', (req, res) => {
+  const sql = 'SELECT * FROM logindetails';
+  db.query(sql, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data)
+  })
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

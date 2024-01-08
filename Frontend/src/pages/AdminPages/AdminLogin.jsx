@@ -5,23 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { AuthData } from "../../auth";
 
 function AdminLogin() {
-  const [logindata, setLoginData] = useState([]);
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
   const { login } = AuthData();
-
+  const [loginData, setLoginData] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:3000/admin/details")
+    fetch("http://localhost:3000/admin/logindetails")
       .then((res) => res.json())
       .then((result) => {
-        setLoginData(result);
         //console.log(result);
+        setLoginData(result);
       })
       .catch((err) => console.log(err));
   }, []);
-
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -30,13 +27,14 @@ function AdminLogin() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(inputs.empID);
+    //console.log(inputs.empID);
     // if (inputs.empID == "nachiket") {
     //   setFormSubmitted(true);
     //   navigate("/admin/dashboard");
     // }
     try {
-      await login(inputs.empID, inputs.password);
+      //console.log("here");
+      await login(inputs.empID, inputs.password, loginData);
       navigate("/admin/dashboard");
     } catch (error) {
       setErrorMessage(error);
