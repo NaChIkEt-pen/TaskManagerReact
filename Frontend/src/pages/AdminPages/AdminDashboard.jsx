@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthData } from "../../auth";
-import { mysql } from "mysql";
+import Axios from "axios";
+import axios from "axios";
 
 function AdminDashboard() {
-  const putData = () => {
-    useEffect(() => {
-      const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "nachiket",
-        database: "taskapp",
-      });
-    });
-    const query = `INSERT INTO details VALUES (${empID},${firstName},${lastName},${position},${manager},${project})`;
-  };
+  // const putData = (empID, firstName, lastName, position, manager, project) => {
+  //   const connection = mysql.create({
+  //     host: "localhost",
+  //     user: "root",
+  //     password: "nachiket",
+  //     database: "taskapp",
+  //   });
+  //   const query = `INSERT INTO details VALUES (${empID},${firstName},${lastName},${position},${manager},${project})`;
+  //   connection.query(query, (err, data) => {
+  //     if (err) console.log(err);
+  //     else console.log("done");
+  //   });
+  // };
 
   //const navigate = useNavigate();
   const { user } = AuthData();
@@ -23,14 +26,48 @@ function AdminDashboard() {
     fetch("http://localhost:3000/admin/details")
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        //console.log(result);
         setTableData(result);
       })
       .catch((err) => console.log(err));
   }, []);
   //const value = user.isAuthenticated;
 
-  if (user.isAuthenticated && tableData != undefined)
+  if (user.isAuthenticated && tableData != undefined) {
+    //putData(103, "nachiket", "pen", "emp", "na", "taskapp");
+    // axios
+    // .post("http://localhost:3000/admin/details", {
+    //   empID: 105,
+    //   firstName: "nach",
+    //   lastName: "pen",
+    //   position: "emp",
+    //   manager: "nachiket",
+    //   Projects: "taskmanager",
+    // })
+    //   .then((response) => {
+    //     console.log(response);
+    //   });
+    // fetch("http://localhost:3000/admin/details", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     empID: 105,
+    //     firstName: "nach",
+    //     lastName: "pen",
+    //     position: "emp",
+    //     manager: "nachiket",
+    //     Projects: "taskmanager",
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
     return (
       <div style={{ textAlign: "-webkit-center" }}>
         <table
@@ -64,7 +101,7 @@ function AdminDashboard() {
           </thead>
           <tbody>
             {tableData.map((row, i) => (
-              <tr key="two">
+              <tr key={i + 1}>
                 <td key="serial">{i + 1}</td>
                 <td key="empID">{row.empID}</td>
                 <td key="firstname">{row.firstName}</td>
@@ -78,7 +115,7 @@ function AdminDashboard() {
         </table>
       </div>
     );
-  else {
+  } else {
     return (
       <>
         <h1>Please Login</h1>
