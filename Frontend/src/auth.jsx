@@ -29,6 +29,7 @@ export const AuthWrapper = () => {
       if (isAdmin) {
         //&& positon === "admin"
         setUser({ name: userName, isAuthenticated: true });
+        //localStorage.setItem("isAuth", user.isAuthenticated);
         resolve("success");
       } else {
         reject("Incorrect password or Incorrect Username");
@@ -37,6 +38,7 @@ export const AuthWrapper = () => {
   };
   const logout = () => {
     setUser({ ...user, isAuthenticated: false });
+    //localStorage.setItem("isAuth", false);
   };
 
   return (

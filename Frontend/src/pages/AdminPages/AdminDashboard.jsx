@@ -1,25 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthData } from "../../auth";
-import Axios from "axios";
-import axios from "axios";
 
+//import { AuthData } from "../../auth";
 function AdminDashboard() {
-  // const putData = (empID, firstName, lastName, position, manager, project) => {
-  //   const connection = mysql.create({
-  //     host: "localhost",
-  //     user: "root",
-  //     password: "nachiket",
-  //     database: "taskapp",
-  //   });
-  //   const query = `INSERT INTO details VALUES (${empID},${firstName},${lastName},${position},${manager},${project})`;
-  //   connection.query(query, (err, data) => {
-  //     if (err) console.log(err);
-  //     else console.log("done");
-  //   });
-  // };
-
-  //const navigate = useNavigate();
+  const [inputs, setInputs] = useState({});
   const { user } = AuthData();
   const [tableData, setTableData] = useState();
   useEffect(() => {
@@ -32,42 +17,42 @@ function AdminDashboard() {
       .catch((err) => console.log(err));
   }, []);
   //const value = user.isAuthenticated;
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs((values) => ({ ...values, [name]: value }));
+    // console.log(event.target.name);
+    // console.log(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    console.log("in handle");
+    fetch("http://localhost:3000/admin/details", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        empID: inputs.empID,
+        firstName: inputs.firstName,
+        lastName: inputs.lastName,
+        position: inputs.position,
+        manager: inputs.manager,
+        Projects: inputs.projects,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  // if (user.isAuthenticated && tableData != undefined) {    //changed here
 
   if (user.isAuthenticated && tableData != undefined) {
-    //putData(103, "nachiket", "pen", "emp", "na", "taskapp");
-    // axios
-    // .post("http://localhost:3000/admin/details", {
-    //   empID: 105,
-    //   firstName: "nach",
-    //   lastName: "pen",
-    //   position: "emp",
-    //   manager: "nachiket",
-    //   Projects: "taskmanager",
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //   });
-    // fetch("http://localhost:3000/admin/details", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     empID: 105,
-    //     firstName: "nach",
-    //     lastName: "pen",
-    //     position: "emp",
-    //     manager: "nachiket",
-    //     Projects: "taskmanager",
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
     return (
       <div style={{ textAlign: "-webkit-center" }}>
         <table
@@ -111,8 +96,84 @@ function AdminDashboard() {
                 <td key="projects">{row.Projects}</td>
               </tr>
             ))}
+            <tr key="input">
+              <td key="inpurt NA">N/A</td>
+              <td key="inputfirst">
+                <input
+                  type="text"
+                  name="empID"
+                  id="empID"
+                  placeholder="EMP ID"
+                  value={inputs.empID || ""}
+                  onChange={handleChange}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="First Name"
+                  value={inputs.firstName || ""}
+                  onChange={handleChange}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  placeholder="Last Name"
+                  value={inputs.lastName || ""}
+                  onChange={handleChange}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="position"
+                  id="position"
+                  placeholder="Position"
+                  value={inputs.position || ""}
+                  onChange={handleChange}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="manager"
+                  id="manager"
+                  placeholder="Manager"
+                  value={inputs.manager || ""}
+                  onChange={handleChange}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="projects"
+                  id="projects"
+                  placeholder="Projects"
+                  value={inputs.projects || ""}
+                  onChange={handleChange}
+                />
+              </td>
+            </tr>
           </tbody>
         </table>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleSubmit}
+        >
+          Add Employee
+        </button>
+        <br />
+        <br />
+        <br />
+        <button type="button" className="btn btn-danger">
+          LOGOUT
+        </button>
       </div>
     );
   } else {
