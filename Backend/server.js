@@ -79,7 +79,29 @@ app.post('/admin/details',async (req, res) => {
             }
         }
     )}
-  })
+})
+  
+app.post('/admin/details/delete', async (req, res) => {
+  console.log(req.body);
+  let query = null;
+  if(req.body.result == true){
+    if (req.body.empID != undefined) {
+      query = `DELETE from details WHERE empID=${req.body.empID}`
+      res.send({ query })
+      console.log(query)
+
+      db.query(query, (err, result) => {
+        if(result){
+          //res.send(result);
+          console.log(result)
+            }else{
+          console.log({message: "NOT DELETED"})
+            }
+      })
+    }
+  }
+
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

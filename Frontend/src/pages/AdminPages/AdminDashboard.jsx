@@ -25,8 +25,45 @@ function AdminDashboard() {
     // console.log(event.target.value);
   };
 
+  const handleDelete = async (event) => {
+    //await confirm("Do you want to delete the data, it cant be undone!!");
+    let index = null;
+    const data = event;
+    if (tableData != undefined) {
+      let result = await confirm(
+        `Do you want to delete the data, it cant be undone!! Data to be deleted Employee ID : ${data}`
+      );
+      if (result) {
+        // for (let i = 0; i < tableData.lenght; i++){
+        //   if (tableData[i].empID == data) {
+        //     index = i;
+        //   }
+        // }
+        fetch("http://localhost:3000/admin/details/delete", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            empID: data,
+            result: result,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            alert(`Deleting Data : ${data.query}`);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } else console.log("not hello");
+    }
+    location.reload();
+  };
+
   const handleSubmit = async (event) => {
-    console.log("in handle");
+    //console.log("in handle");
     fetch("http://localhost:3000/admin/details", {
       method: "POST",
       headers: {
@@ -48,15 +85,16 @@ function AdminDashboard() {
       .catch((error) => {
         console.error("Error:", error);
       });
+    location.reload();
   };
 
   // if (user.isAuthenticated && tableData != undefined) {    //changed here
 
-  if (user.isAuthenticated && tableData != undefined) {
+  if (true && tableData != undefined) {
     return (
       <div style={{ textAlign: "-webkit-center" }}>
         <table
-          className="table table table-striped"
+          className="table table table-striped "
           style={{ width: "60%", marginTop: "10%" }}
         >
           <thead className="thead-dark">
@@ -68,10 +106,10 @@ function AdminDashboard() {
                 empID
               </th>
               <th scope="col" key="firstname">
-                FirstName
+                First Name
               </th>
               <th scope="col" key="lastname">
-                LastName
+                Last Name
               </th>
               <th scope="col" key="position">
                 Position
@@ -81,6 +119,9 @@ function AdminDashboard() {
               </th>
               <th scope="col" key="project">
                 Projects
+              </th>
+              <th scope="col" key="deletebutton">
+                Delete
               </th>
             </tr>
           </thead>
@@ -94,6 +135,15 @@ function AdminDashboard() {
                 <td key="position">{row.position}</td>
                 <td key="manager">{row.manager}</td>
                 <td key="projects">{row.Projects}</td>
+                <td key="deletebutton">
+                  <button
+                    type="submit"
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(row.empID)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
             <tr key="input">
@@ -166,7 +216,7 @@ function AdminDashboard() {
           className="btn btn-primary"
           onClick={handleSubmit}
         >
-          Add Employee
+          Add Employee / Update Data
         </button>
         <br />
         <br />
