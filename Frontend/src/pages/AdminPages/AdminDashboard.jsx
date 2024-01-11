@@ -211,13 +211,25 @@ function AdminDashboard() {
             </tr>
           </tbody>
         </table>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleSubmit}
-        >
-          Add Employee / Update Data
-        </button>
+        <div>
+          <button
+            style={{ marginRight: "150px" }}
+            type="button"
+            className="btn btn-primary"
+            onClick={handleSubmit}
+          >
+            Add Employee / Update Data
+          </button>
+
+          <button
+            style={{ marginRight: "100px" }}
+            type="button"
+            className="btn btn-success"
+            onClick={() => location.reload()}
+          >
+            Rerfesh
+          </button>
+        </div>
         <br />
         <br />
         <br />
