@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthData } from "../../auth";
 
 //import { AuthData } from "../../auth";
-function AdminDashboard() {
+function EmpDashboard() {
   const [inputs, setInputs] = useState({});
-  const { user } = AuthData();
+  const { userEmp } = AuthData();
   const [tableData, setTableData] = useState();
   useEffect(() => {
     fetch("http://localhost:3000/admin/details")
@@ -90,7 +90,7 @@ function AdminDashboard() {
 
   // if (user.isAuthenticated && tableData != undefined) {    //changed here
 
-  if (user.isAuthenticated && tableData != undefined) {
+  if (userEmp.isAuthenticated && tableData != undefined) {
     return (
       <div style={{ textAlign: "-webkit-center" }}>
         <table
@@ -120,9 +120,9 @@ function AdminDashboard() {
               <th scope="col" key="project">
                 Projects
               </th>
-              <th scope="col" key="deletebutton">
+              {/* <th scope="col" key="deletebutton">
                 Delete
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody>
@@ -135,15 +135,15 @@ function AdminDashboard() {
                 <td key="position">{row.position}</td>
                 <td key="manager">{row.manager}</td>
                 <td key="projects">{row.Projects}</td>
-                <td key="deletebutton">
-                  <button
+                {/* <td key="deletebutton"> */}
+                {/* <button
                     type="submit"
                     className="btn btn-danger"
                     onClick={() => handleDelete(row.empID)}
                   >
                     Delete
-                  </button>
-                </td>
+                  </button> */}
+                {/* </td> */}
               </tr>
             ))}
             <tr key="input">
@@ -242,10 +242,10 @@ function AdminDashboard() {
     return (
       <>
         <h1>Please Login</h1>
-        <Link to={"/admin/login"}>Login</Link>
+        <Link to={"/emp/login"}>Login</Link>
       </>
     );
   }
 }
 
-export default AdminDashboard;
+export default EmpDashboard;
