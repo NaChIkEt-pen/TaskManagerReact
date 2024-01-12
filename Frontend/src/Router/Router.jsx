@@ -5,11 +5,11 @@ import AdminDashboard from "../pages/AdminPages/AdminDashboard";
 import PageNotFound from "../pages/PageNotFound";
 import EmpLogin from "../pages/EmployeePages/EmpLogin";
 import EmpDashboard from "../pages/EmployeePages/EmpDashboard";
-
+import HomePage from "../pages/HomePage";
 function MyRouter() {
   return (
     <Routes>
-      <Route path="/" element={<PageNotFound />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/admin/" element={<AdminLogin />} />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />

@@ -6,6 +6,8 @@ import { AuthData } from "../../auth";
 function AdminDashboard() {
   const [inputs, setInputs] = useState({});
   const { user } = AuthData();
+  const { logout } = AuthData();
+  const navigate = useNavigate();
   const [tableData, setTableData] = useState();
   useEffect(() => {
     fetch("http://localhost:3000/admin/details")
@@ -88,9 +90,20 @@ function AdminDashboard() {
     location.reload();
   };
 
-  // if (user.isAuthenticated && tableData != undefined) {    //changed here
+  const handleLogout = async () => {
+    await logout();
+  };
 
-  if (user.isAuthenticated && tableData != undefined) {
+  // if (user.isAuthenticated && tableData != undefined) {    //changed here
+  //console.log(window.sessionStorage.getItem("isAdmin"));
+  if (
+    (user.isAuthenticated ||
+      window.sessionStorage.getItem("isAdmin") == "true") &&
+    tableData != undefined
+  ) {
+    user.isAuthenticated = true;
+    window.sessionStorage.setItem("isAdmin", user.isAuthenticated.toString());
+    //console.log(window.sessionStorage.getItem("isAdmin"));
     return (
       <div style={{ textAlign: "-webkit-center" }}>
         <table
@@ -233,7 +246,11 @@ function AdminDashboard() {
         <br />
         <br />
         <br />
-        <button type="button" className="btn btn-danger">
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={() => handleLogout()}
+        >
           LOGOUT
         </button>
       </div>
@@ -241,8 +258,7 @@ function AdminDashboard() {
   } else {
     return (
       <>
-        <h1>Please Login</h1>
-        <Link to={"/admin/login"}>Login</Link>
+        <Link to={"/"}>Login</Link>
       </>
     );
   }

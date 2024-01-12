@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthData } from "../../auth";
 
 function EmpLogin() {
+  window.sessionStorage.setItem("isEmp", false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();

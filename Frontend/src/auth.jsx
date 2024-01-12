@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { Routes } from "react-router-dom";
+import { Routes, useNavigate } from "react-router-dom";
 import MyRouter from "./Router/Router";
 import { fetchData } from "./fetchData";
 const AuthContext = createContext();
@@ -7,6 +7,7 @@ export const AuthData = () => useContext(AuthContext);
 
 export const AuthWrapper = () => {
   var isAdmin = false;
+  const navigate = useNavigate();
   const [logindata, setLoginData] = useState([]);
   const [user, setUser] = useState({ name: "", isAuthenticated: false });
   const [userEmp, setUserEmp] = useState({ name: "", isAuthenticated: false });
@@ -33,11 +34,12 @@ export const AuthWrapper = () => {
     });
     //console.log(isAdmin);
     //userName == 101 && password == "nachiket"
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (isAdmin) {
         console.log("isadmin");
         //&& positon === "admin"
         setUser({ name: userName, isAuthenticated: true });
+
         setUserEmp({ name: userName, isAuthenticated: true });
         //localStorage.setItem("isAuth", user.isAuthenticated);
         resolve("success");
@@ -51,7 +53,19 @@ export const AuthWrapper = () => {
     });
   };
   const logout = () => {
+    console.log("in lout1");
     setUser({ ...user, isAuthenticated: false });
+    setUserEmp({ ...userEmp, isAuthenticated: false });
+    //console.log(user.isAuthenticated);
+    window.sessionStorage.setItem("isAdmin", false);
+    window.sessionStorage.setItem("isEmp", false);
+    console.log(user.isAuthenticated);
+    console.log(userEmp.isAuthenticated);
+    console.log(window.sessionStorage.getItem("isAdmin"));
+    console.log(window.sessionStorage.getItem("isEmp"));
+    {
+      navigate("/");
+    }
     //localStorage.setItem("isAuth", false);
   };
 

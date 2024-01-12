@@ -6,6 +6,8 @@ import { AuthData } from "../../auth";
 function EmpDashboard() {
   const [inputs, setInputs] = useState({});
   const { userEmp } = AuthData();
+  const navigate = useNavigate();
+  const { logout } = AuthData();
   const [tableData, setTableData] = useState();
   useEffect(() => {
     fetch("http://localhost:3000/admin/details")
@@ -88,9 +90,19 @@ function EmpDashboard() {
     location.reload();
   };
 
+  const handleLogout = async () => {
+    console.log("in logout");
+    await logout();
+  };
   // if (user.isAuthenticated && tableData != undefined) {    //changed here
 
-  if (userEmp.isAuthenticated && tableData != undefined) {
+  if (
+    (userEmp.isAuthenticated ||
+      window.sessionStorage.getItem("isEmp") == "true") &&
+    tableData != undefined
+  ) {
+    userEmp.isAuthenticated = true;
+    window.sessionStorage.setItem("isEmp", userEmp.isAuthenticated.toString());
     return (
       <div style={{ textAlign: "-webkit-center" }}>
         <table
@@ -233,7 +245,11 @@ function EmpDashboard() {
         <br />
         <br />
         <br />
-        <button type="button" className="btn btn-danger">
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={() => handleLogout()}
+        >
           LOGOUT
         </button>
       </div>
@@ -241,8 +257,7 @@ function EmpDashboard() {
   } else {
     return (
       <>
-        <h1>Please Login</h1>
-        <Link to={"/emp/login"}>Login</Link>
+        <Link to={"/"}>Login</Link>
       </>
     );
   }
